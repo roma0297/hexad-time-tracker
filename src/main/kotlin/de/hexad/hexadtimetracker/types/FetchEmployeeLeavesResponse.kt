@@ -9,15 +9,18 @@ import net.minidev.json.JSONArray
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 class FetchEmployeeLeavesResponse {
+
     lateinit var leaves: List<EmployeeLeaveType>
+
+    companion object {
+        val mapper = jacksonObjectMapper().also { it.registerModule(JavaTimeModule()) }
+    }
 
     @JsonProperty("response")
     fun unpackNested(response: Map<String, Any>) {
         val employeeLeaves = JSONArray()
         if (response["result"] is List<*>) {
             employeeLeaves.addAll(response["result"] as List<*>)
-            val mapper = jacksonObjectMapper()
-            mapper.registerModule(JavaTimeModule())
             leaves = mapper.readValue(employeeLeaves.toJSONString())
         }
     }
