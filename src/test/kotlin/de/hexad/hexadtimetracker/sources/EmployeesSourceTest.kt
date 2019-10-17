@@ -46,48 +46,80 @@ class EmployeesSourceTest {
         mockedResponse.setBody("""[
           {
             "EmployeeID": "1570609737689",
+            "recordId": "431062000001780239",
             "Address": "",
-            "Added time": "07-Oct-2019 12:03:33",
-            "First Name": "first one",
-            "Last Name": "last one",
-            "Department": "Engineering",
-            "Other Email": "",
-            "Location": "Berlin"
+            "First Name": "firstName1",
+            "Last Name": "lastName1",
+            "Department": "Department1",
+            "Location": "Location1",
+            "Email ID": "employee1@email.com",
+            "Photo": "photoUrl1",
+            "Photo_downloadUrl": "photoDownloadUrl1",
+            "Added time": "15-Jan-2019 11:15:12",
+            "Date of joining": "15-Jan-2019",
+            "Modified time": "20-Jan-2019 14:22:43",
+            "Employee Role": "Team member",
+            "Title": "Software Engineer",
+            "Employee Status": "Active",
+            "Reporting To": "Superordinate1"
           },
           {
             "EmployeeID": "1570609737680",
+            "recordId": "431062000001780030",
             "Address": "",
-            "Added time": "07-Oct-2019 12:03:33",
-            "Department": "Engineering",
-            "First Name": "first second",
-            "Last Name": "last second",
-            "Location": "Berlin"
+            "First Name": "firstName2",
+            "Last Name": "lastName2",
+            "Department": "Department2",
+            "Location": "Location2",
+            "Email ID": "employee2@email.com",
+            "Photo": "photoUrl2",
+            "Photo_downloadUrl": "photoDownloadUrl2",
+            "Modified time": "20-Jan-2019 14:22:43",
+            "Added time": "15-Jan-2019 11:15:12",
+            "Date of joining": "15-Jan-2019",
+            "Employee Role": "Team member",
+            "Title": "Software Engineer",
+            "Employee Status": "Inactive",
+            "Reporting To": "Superordinate2"
          }]""")
 
         mockServer.enqueue(mockedResponse)
 
         //when
         val employees = employeesSource.getEmployees()
-        //then
 
+        //then
         assertEquals(employees.size, 2)
 
-        val firstEmployee = employees.get(0)
+        val firstEmployee = employees[0]
 
-        assertEquals(firstEmployee.employeeId, "1570609737689")
-        assertEquals(firstEmployee.firstName, "first one")
-        assertEquals(firstEmployee.lastName, "last one")
-        assertEquals(firstEmployee.department, "Engineering")
-        assertEquals(firstEmployee.workLocation, "Berlin")
+        assertEquals("1570609737689", firstEmployee.employeeId)
+        assertEquals("firstName1", firstEmployee.firstName)
+        assertEquals("lastName1", firstEmployee.lastName)
+        assertEquals("Department1", firstEmployee.department)
+        assertEquals("Location1", firstEmployee.workLocation)
+        assertEquals("employee1@email.com", firstEmployee.email)
+        assertEquals("photoUrl1", firstEmployee.photoUrl)
+        assertEquals("photoDownloadUrl1", firstEmployee.photoDownloadUrl)
+        assertEquals("Team member", firstEmployee.employeeRole)
+        assertEquals("Software Engineer", firstEmployee.title)
+        assertEquals("Active", firstEmployee.status)
+        assertEquals("Superordinate1", firstEmployee.superordinate)
 
+        val secondEmployee = employees[1]
 
-        val secondEmployee = employees.get(1)
-
-        assertEquals(secondEmployee.employeeId, "1570609737680")
-        assertEquals(secondEmployee.firstName, "first second")
-        assertEquals(secondEmployee.lastName, "last second")
-        assertEquals(secondEmployee.department, "Engineering")
-        assertEquals(secondEmployee.workLocation, "Berlin")
+        assertEquals("1570609737680", secondEmployee.employeeId)
+        assertEquals("firstName2", secondEmployee.firstName)
+        assertEquals("lastName2", secondEmployee.lastName)
+        assertEquals("Department2", secondEmployee.department)
+        assertEquals("Location2", secondEmployee.workLocation)
+        assertEquals("employee2@email.com", secondEmployee.email)
+        assertEquals("photoUrl2", secondEmployee.photoUrl)
+        assertEquals("photoDownloadUrl2", secondEmployee.photoDownloadUrl)
+        assertEquals("Team member", secondEmployee.employeeRole)
+        assertEquals("Software Engineer", secondEmployee.title)
+        assertEquals("Inactive", secondEmployee.status)
+        assertEquals("Superordinate2", secondEmployee.superordinate)
     }
 
 }
