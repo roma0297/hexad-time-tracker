@@ -13,10 +13,10 @@ class HolidayType(
         val name: String,
         @JsonProperty(value = "fromDate")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        val fromDate: Date,
+        val startDate: Date,
         @JsonProperty(value = "toDate")
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        val toDate: Date,
+        val endDate: Date,
         @JsonProperty("isRestrictedHoliday")
         val isRestrictedHoliday: Boolean,
         @JsonProperty("Remarks")
