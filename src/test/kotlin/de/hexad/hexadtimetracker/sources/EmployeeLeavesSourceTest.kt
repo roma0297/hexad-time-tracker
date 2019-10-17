@@ -44,71 +44,51 @@ class EmployeeLeavesSourceTest {
         mockedResponse.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         mockedResponse.setResponseCode(200)
         mockedResponse.setBody("""
-            {
+                        {
               "response": {
                 "result": [
                   {
-                    "Employee_ID": "Karan John 1",
+                    "Medical_Certificate_downloadUrl": "",
+                    "ZP_Leave_File_Upload": "",
+                    "Employee_ID": "Farzaneh Sabzi 1182",
                     "DayDetails": {
-                      "07-Mar-2020": {
-                        "LeaveCount": "0.5",
-                        "Session": 1
-                      },
-                      "04-Mar-2020": {
-                        "LeaveCount": "1"
-                      },
-                      "06-Mar-2020": {
-                        "LeaveCount": "0.25",
-                        "Session": 1
-                      },
-                      "08-Mar-2020": {
-                        "LeaveCount": "0.5",
-                        "Session": 1
-                      },
-                      "09-Mar-2020": {
-                        "LeaveCount": "0.5",
-                        "Session": 2
-                      },
-                      "05-Mar-2020": {
-                        "LeaveCount": "0.5",
-                        "Session": 1
+                      "14-Oct-2019": {
+                        "LeaveCount": "1.0"
                       }
                     },
-                    "Leavetype.ID": "413124000000645719",
-                    "From": "04-Mar-2020",
+                    "Leavetype.ID": "431062000000185043",
+                    "From": "14-Oct-2019",
                     "Unit": "Day",
-                    "ApprovalStatus": "Pending",
-                    "Reasonforleave": "Vacation",
-                    "Daystaken": "2.25",
-                    "TeamEmailID": "teamemail@gmail.com",
-                    "Department": "HR",
-                    "Leavetype": "Annual leave",
-                    "To": "09-Mar-2020",
-                    "Department.ID": "413124680000117005",
-                    "Employee_ID.ID": "413124000780117005",
-                    "DateOfRequest": "14-Aug-2019"
+                    "ApprovalStatus": "Approved",
+                    "Daystaken": "1.0",
+                    "Reasonforleave": "",
+                    "TeamEmailID": "",
+                    "Medical_Certificate": "",
+                    "Leavetype": "Privilage Leave",
+                    "ApprovalTime": "02-Oct-2019 09:42:57",
+                    "To": "14-Oct-2019",
+                    "Employee_ID.ID": "431062000001599911",
+                    "DateOfRequest": "01-Oct-2019",
+                    "ZP_Leave_File_Upload_downloadUrl": ""
                   }
                 ],
                 "message": "Data fetched successfully",
                 "uri": "/api/forms/leave/getDataByID",
                 "status": 0
-              }  
-            }""".trimIndent())
+              }
+            }
+            """.trimIndent())
 
         mockServer.enqueue(mockedResponse)
 
         //when
-        val leaves = employeeLeavesSource.getEmployeeLeaves("431062000001278239")
+        val leaveId = "431062000001599911"
+        val leave = employeeLeavesSource.getEmployeeLeaves(leaveId)[0]
+
         //then
-
-        Assertions.assertEquals(leaves.size, 1)
-
-        val leave = leaves[0]
-
-        Assertions.assertEquals("teamemail@gmail.com", leave.email)
-        Assertions.assertEquals(LocalDate.of(2020, Month.MARCH, 4), leave.startDate)
-        Assertions.assertEquals(LocalDate.of(2020, Month.MARCH, 9), leave.endDate)
-        Assertions.assertEquals("Annual leave", leave.leaveType)
+        Assertions.assertEquals(leaveId, leave.leaveId)
+        Assertions.assertEquals(LocalDate.of(2019, Month.OCTOBER, 14), leave.from)
+        Assertions.assertEquals(LocalDate.of(2019, Month.OCTOBER, 14), leave.to)
     }
 
 

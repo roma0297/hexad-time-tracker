@@ -11,8 +11,10 @@ class EmployeeLeaveType(@JsonProperty(value = "TeamEmailID") val email: String,
 
                         @JsonProperty(value = "From")
                         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MMM-yyyy")
-                        val startDate: LocalDate,
+                        val from: LocalDate,
 
                         @JsonProperty(value = "To")
                         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MMM-yyyy")
-                        val endDate: LocalDate)
+                        val to: LocalDate,
+
+                        @JsonProperty(value = "Employee_ID.ID") val leaveId: String)
