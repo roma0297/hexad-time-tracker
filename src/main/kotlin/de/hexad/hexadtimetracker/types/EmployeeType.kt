@@ -22,11 +22,11 @@ class EmployeeType(@JsonProperty(value = "EmployeeID") val employeeId: String,
                    val modifiedTime: Date,
 
                    @JsonProperty(value = "Added time")
-                   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MMM-dd hh:mm:ss")
+                   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MMM-yyyy hh:mm:ss")
                    val creationTime: Date,
 
                    @JsonProperty(value = "Date of joining")
-                   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MMM-dd")
+                   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MMM-yyyy")
                    val joiningDate: Date,
 
                    @JsonProperty(value = "Employee Role") val employeeRole: String,
