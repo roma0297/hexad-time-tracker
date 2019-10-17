@@ -20,9 +20,9 @@ class Controller(private val employeesSource: EmployeesSource,
         return employeesSource.getEmployees()
     }
 
-    @GetMapping("/leaves/{employeeId}")
-    fun getLeaves(@PathVariable employeeId: String): List<EmployeeLeaveType> {
-        return employeeLeavesSource.getEmployeeLeaves(employeeId)
+    @GetMapping("/leaves/{leaveId}")
+    fun getLeaves(@PathVariable leaveId: String): List<EmployeeLeaveType> {
+        return employeeLeavesSource.getEmployeeLeaves(leaveId)
     }
 
     @GetMapping("/holidays")
