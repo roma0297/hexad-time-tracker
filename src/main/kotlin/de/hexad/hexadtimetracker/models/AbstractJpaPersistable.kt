@@ -10,9 +10,9 @@ import javax.persistence.*
 abstract class AbstractJpaPersistable {
 
     @Id
-    @Column(name = "id")
+    @Column(name = "pk")
     @GeneratedValue
-    private var id: Int? = null
+    private var pk: Int? = null
         get() = field
 
     @Id
@@ -26,10 +26,10 @@ abstract class AbstractJpaPersistable {
         if (javaClass != ProxyUtils.getUserClass(other)) return false
         other as AbstractJpaPersistable
 
-        return this.id == other.id && this.id != null
+        return this.pk == other.pk && this.pk != null
     }
 
-    override fun hashCode(): Int = Objects.hash(id)
+    override fun hashCode(): Int = Objects.hash(pk)
 
-    override fun toString() = "Entity of type ${javaClass.name} with id: $id"
+    override fun toString() = "Entity of type ${javaClass.name} with pk: $pk"
 }

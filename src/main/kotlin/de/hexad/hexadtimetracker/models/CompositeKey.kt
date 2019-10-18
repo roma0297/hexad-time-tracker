@@ -6,6 +6,6 @@ import javax.persistence.Embeddable
 
 @Embeddable
 class CompositeKey(
-        val id: Int? = null,
+        val pk: Int? = null,
         val timestamp: LocalDateTime? = LocalDateTime.now()
 ) : Serializable
