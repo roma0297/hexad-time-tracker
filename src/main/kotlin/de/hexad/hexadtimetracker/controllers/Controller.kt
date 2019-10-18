@@ -1,13 +1,7 @@
 package de.hexad.hexadtimetracker.controllers
 
-import de.hexad.hexadtimetracker.sources.EmployeeLeavesSource
-import de.hexad.hexadtimetracker.sources.EmployeesSource
-import de.hexad.hexadtimetracker.sources.HolidaysSource
-import de.hexad.hexadtimetracker.sources.TimesheetsSource
-import de.hexad.hexadtimetracker.types.EmployeeLeaveType
-import de.hexad.hexadtimetracker.types.EmployeeType
-import de.hexad.hexadtimetracker.types.HolidayType
-import de.hexad.hexadtimetracker.types.TimesheetType
+import de.hexad.hexadtimetracker.sources.*
+import de.hexad.hexadtimetracker.types.*
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
@@ -16,7 +10,8 @@ import org.springframework.web.bind.annotation.RestController
 class Controller(private val employeesSource: EmployeesSource,
                  private val employeeLeavesSource: EmployeeLeavesSource,
                  private val holidaysSource: HolidaysSource,
-                 private val timesheetsSource: TimesheetsSource) {
+                 private val timesheetsSource: TimesheetsSource,
+                 private val projectsSource: ProjectsSource) {
 
     @GetMapping("/employees")
     fun getEmployees(): List<EmployeeType> {
@@ -36,5 +31,10 @@ class Controller(private val employeesSource: EmployeesSource,
     @GetMapping("/timesheets")
     fun getTimesheets(): List<TimesheetType> {
         return timesheetsSource.getTimesheets()
+    }
+
+    @GetMapping("/projects")
+    fun getProjects(): List<ProjectType> {
+        return projectsSource.getProjects()
     }
 }
