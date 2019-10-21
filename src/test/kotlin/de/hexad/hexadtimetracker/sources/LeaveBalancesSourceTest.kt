@@ -20,13 +20,13 @@ class LeaveBalancesSourceTest {
         private const val DELTA = 1e-6
     }
 
-    private lateinit var leaveBalancesSource: LeaveBalancesSource
+    private lateinit var leaveBalanceReportsSource: LeaveBalanceReportsSource
 
     private val mockServer = MockWebServer()
 
     @Before
     fun setUp() {
-        leaveBalancesSource = LeaveBalancesSource(WebClient.create(mockServer.url("/").toString()))
+        leaveBalanceReportsSource = LeaveBalanceReportsSource(WebClient.create(mockServer.url("/").toString()))
     }
 
     @After
@@ -91,39 +91,39 @@ class LeaveBalancesSourceTest {
         mockServer.enqueue(mockedResponse)
 
         //when
-        val leaveBalances = leaveBalancesSource.getLeaveBalanceForEmployee("")
+        val leaveBalanceReports = leaveBalanceReportsSource.getLeaveBalanceReportsForEmployee("")
 
         //then
-        assertEquals(leaveBalances.size, 2)
+        assertEquals(leaveBalanceReports.size, 2)
 
-        val leaveBalance1 = leaveBalances[0]
-        assertEquals("431062000000185013", leaveBalance1.id)
-        assertEquals("Birth of your child", leaveBalance1.name)
-        assertEquals(1, leaveBalance1.permittedCount)
-        assertEquals(1.0, leaveBalance1.balanceCount, DELTA)
-        assertEquals(0, leaveBalance1.availedCount)
-        assertEquals("Days", leaveBalance1.unit)
-        assertEquals(false, leaveBalance1.isHalfDayEnabled)
-        assertEquals(false, leaveBalance1.isQuarterDayEnabled)
-        assertEquals(false, leaveBalance1.isHourEnabled)
-        assertEquals("#64d5fd", leaveBalance1.colorCode)
-        assertEquals(false, leaveBalance1.isBalanceHidden)
-        assertEquals(0.0, leaveBalance1.showFileUploadAfter, DELTA)
-        assertEquals(1, leaveBalance1.version)
+        val leaveBalanceReport1 = leaveBalanceReports[0]
+        assertEquals("431062000000185013", leaveBalanceReport1.id)
+        assertEquals("Birth of your child", leaveBalanceReport1.name)
+        assertEquals(1, leaveBalanceReport1.permittedCount)
+        assertEquals(1.0, leaveBalanceReport1.balanceCount, DELTA)
+        assertEquals(0, leaveBalanceReport1.availedCount)
+        assertEquals("Days", leaveBalanceReport1.unit)
+        assertEquals(false, leaveBalanceReport1.isHalfDayEnabled)
+        assertEquals(false, leaveBalanceReport1.isQuarterDayEnabled)
+        assertEquals(false, leaveBalanceReport1.isHourEnabled)
+        assertEquals("#64d5fd", leaveBalanceReport1.colorCode)
+        assertEquals(false, leaveBalanceReport1.isBalanceHidden)
+        assertEquals(0.0, leaveBalanceReport1.showFileUploadAfter, DELTA)
+        assertEquals(1, leaveBalanceReport1.version)
 
-        val leaveBalance2 = leaveBalances[1]
-        assertEquals("431062000000277003", leaveBalance2.id)
-        assertEquals("Child Sick Leave", leaveBalance2.name)
-        assertEquals(20, leaveBalance2.permittedCount)
-        assertEquals(20.0, leaveBalance2.balanceCount, DELTA)
-        assertEquals(0, leaveBalance2.availedCount)
-        assertEquals("Days", leaveBalance2.unit)
-        assertEquals(false, leaveBalance2.isHalfDayEnabled)
-        assertEquals(false, leaveBalance2.isQuarterDayEnabled)
-        assertEquals(false, leaveBalance2.isHourEnabled)
-        assertEquals("#64d5fd", leaveBalance2.colorCode)
-        assertEquals(false, leaveBalance2.isBalanceHidden)
-        assertEquals(0.25, leaveBalance2.showFileUploadAfter, DELTA)
-        assertEquals(1, leaveBalance2.version)
+        val leaveBalanceReport2 = leaveBalanceReports[1]
+        assertEquals("431062000000277003", leaveBalanceReport2.id)
+        assertEquals("Child Sick Leave", leaveBalanceReport2.name)
+        assertEquals(20, leaveBalanceReport2.permittedCount)
+        assertEquals(20.0, leaveBalanceReport2.balanceCount, DELTA)
+        assertEquals(0, leaveBalanceReport2.availedCount)
+        assertEquals("Days", leaveBalanceReport2.unit)
+        assertEquals(false, leaveBalanceReport2.isHalfDayEnabled)
+        assertEquals(false, leaveBalanceReport2.isQuarterDayEnabled)
+        assertEquals(false, leaveBalanceReport2.isHourEnabled)
+        assertEquals("#64d5fd", leaveBalanceReport2.colorCode)
+        assertEquals(false, leaveBalanceReport2.isBalanceHidden)
+        assertEquals(0.25, leaveBalanceReport2.showFileUploadAfter, DELTA)
+        assertEquals(1, leaveBalanceReport2.version)
     }
 }

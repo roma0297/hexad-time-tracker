@@ -3,10 +3,12 @@ package de.hexad.hexadtimetracker.models
 import org.springframework.data.util.ProxyUtils
 import java.time.LocalDateTime
 import java.util.*
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.MappedSuperclass
 
 @MappedSuperclass
-@IdClass(CompositeKey::class)
 abstract class AbstractJpaPersistable {
 
     @Id
@@ -15,7 +17,6 @@ abstract class AbstractJpaPersistable {
     private var pk: Int? = null
         get() = field
 
-    @Id
     @Column(name = "timestamp")
     val timestamp: LocalDateTime = LocalDateTime.now()
 
