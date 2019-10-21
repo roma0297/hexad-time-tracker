@@ -1,20 +1,20 @@
 package de.hexad.hexadtimetracker.sources
 
 import de.hexad.hexadtimetracker.providers.UserInfo
-import de.hexad.hexadtimetracker.types.EmployeeLeaveBalanceType
-import de.hexad.hexadtimetracker.types.FetchEmployeeLeaveBalancesResponse
+import de.hexad.hexadtimetracker.types.FetchLeaveBalanceReportsResponse
+import de.hexad.hexadtimetracker.types.LeaveBalanceReportType
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 
 @Component
-class LeaveBalancesSource(private val zohoApiWebClient: WebClient) {
+class LeaveBalanceReportsSource(private val zohoApiWebClient: WebClient) {
     companion object {
         private const val FETCH_PROJECTS_REQUEST_PATH = "/leave/getLeaveTypeDetails"
         private const val AUTHENTICATION_TOKEN_KEY = "authtoken"
     }
 
-    fun getLeaveBalanceForEmployee(userId: String): List<EmployeeLeaveBalanceType> {
+    fun getLeaveBalanceReportsForEmployee(userId: String): List<LeaveBalanceReportType> {
         val principal = SecurityContextHolder.getContext().authentication.principal as UserInfo
 
         return zohoApiWebClient.get().uri { uriBuilder ->
@@ -22,7 +22,7 @@ class LeaveBalancesSource(private val zohoApiWebClient: WebClient) {
             uriBuilder.queryParam(AUTHENTICATION_TOKEN_KEY, principal.token)
             uriBuilder.queryParam("userId", userId)
                     .build()
-        }.retrieve().bodyToMono(FetchEmployeeLeaveBalancesResponse::class.java).block()?.leaveBalances ?: listOf()
+        }.retrieve().bodyToMono(FetchLeaveBalanceReportsResponse::class.java).block()?.reports ?: listOf()
     }
 
 }

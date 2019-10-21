@@ -8,9 +8,9 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import net.minidev.json.JSONArray
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class FetchEmployeeLeaveBalancesResponse {
+class FetchLeaveBalanceReportsResponse {
 
-    lateinit var leaveBalances: List<EmployeeLeaveBalanceType>
+    lateinit var reports: List<LeaveBalanceReportType>
 
     companion object {
         val mapper = jacksonObjectMapper().also { it.registerModule(JavaTimeModule()) }
@@ -18,10 +18,10 @@ class FetchEmployeeLeaveBalancesResponse {
 
     @JsonProperty("response")
     fun unpackNested(response: Map<String, Any>) {
-        val leaveBalancesJsonArray = JSONArray()
+        val reportsJsonArray = JSONArray()
         if (response["result"] is List<*>) {
-            leaveBalancesJsonArray.addAll(response["result"] as List<*>)
-            leaveBalances = mapper.readValue(leaveBalancesJsonArray.toJSONString())
+            reportsJsonArray.addAll(response["result"] as List<*>)
+            reports = mapper.readValue(reportsJsonArray.toJSONString())
         }
     }
 }

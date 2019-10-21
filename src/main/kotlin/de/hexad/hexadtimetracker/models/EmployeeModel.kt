@@ -2,9 +2,7 @@ package de.hexad.hexadtimetracker.models;
 
 import java.time.LocalDate
 import java.time.LocalDateTime
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "employees")
@@ -43,5 +41,18 @@ class EmployeeModel(
         @Column(name = "location")
         val location: String,
         @Column(name = "superordinate")
-        val superordinate: String
-) : AbstractJpaPersistable()
+        val superordinate: String,
+
+        @OneToMany(mappedBy = "employee", cascade = [CascadeType.ALL])
+        var leaveBalanceReports: MutableList<LeaveBalanceReportModel> = mutableListOf()
+) : AbstractJpaPersistable() {
+    fun addLeaveBalanceReport(leaveBalanceReport: LeaveBalanceReportModel) {
+        leaveBalanceReports.add(leaveBalanceReport)
+        leaveBalanceReport.employee = this
+    }
+
+    fun removeLeaveBalanceReport(leaveBalanceReport: LeaveBalanceReportModel) {
+            leaveBalanceReports.remove(leaveBalanceReport)
+            leaveBalanceReport.employee = null
+    }
+}
