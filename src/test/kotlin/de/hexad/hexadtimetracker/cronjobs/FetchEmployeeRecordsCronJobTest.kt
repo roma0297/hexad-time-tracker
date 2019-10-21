@@ -1,6 +1,5 @@
 package de.hexad.hexadtimetracker.cronjobs
 
-import de.hexad.hexadtimetracker.converters.EmployeeTypeToEmployeeModelConverter
 import de.hexad.hexadtimetracker.models.EmployeeModel
 import de.hexad.hexadtimetracker.repositories.EmployeeRepository
 import de.hexad.hexadtimetracker.sources.EmployeesSource
@@ -13,6 +12,7 @@ import io.mockk.verify
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.springframework.core.convert.ConversionService
 
 class FetchEmployeeRecordsCronJobTest {
 
@@ -21,12 +21,12 @@ class FetchEmployeeRecordsCronJobTest {
     @MockK
     var employeesSource = mockk<EmployeesSource>()
     @MockK
-    var employeeTypeToEmployeeModelConverter = mockk<EmployeeTypeToEmployeeModelConverter>()
+    var conversionService = mockk<ConversionService>()
 
     var fetchEmployeeRecordsCronJob = FetchEmployeeRecordsCronJob(
             employeesSource = employeesSource,
             employeeRepository = employeeRepository,
-            employeeTypeToEmployeeModelConverter = employeeTypeToEmployeeModelConverter)
+            conversionService = conversionService)
 
     @Test
     fun `should retrieve all employee DTOs, convert them to models and store in the DB`() {
@@ -38,8 +38,8 @@ class FetchEmployeeRecordsCronJobTest {
 
         val employeeModel1 = mockk<EmployeeModel>()
         val employeeModel2 = mockk<EmployeeModel>()
-        every { employeeTypeToEmployeeModelConverter.convert(employeeDto1) } returns employeeModel1
-        every { employeeTypeToEmployeeModelConverter.convert(employeeDto2) } returns employeeModel2
+        every { conversionService.convert(employeeDto1, EmployeeModel::class.java) } returns employeeModel1
+        every { conversionService.convert(employeeDto2, EmployeeModel::class.java) } returns employeeModel2
 
         //when
         fetchEmployeeRecordsCronJob.perform()
