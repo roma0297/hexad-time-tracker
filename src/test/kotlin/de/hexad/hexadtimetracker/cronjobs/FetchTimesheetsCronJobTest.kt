@@ -1,6 +1,5 @@
 package de.hexad.hexadtimetracker.cronjobs
 
-import de.hexad.hexadtimetracker.converters.TimesheetTypeToTimesheetModelConverter
 import de.hexad.hexadtimetracker.models.TimesheetModel
 import de.hexad.hexadtimetracker.repositories.TimesheetsRepository
 import de.hexad.hexadtimetracker.sources.TimesheetsSource
@@ -12,16 +11,17 @@ import io.mockk.verify
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.springframework.core.convert.ConversionService
 
 class FetchTimesheetsCronJobTest {
     private val timesheetsSource = mockk<TimesheetsSource>()
     private val timesheetsRepository = mockk<TimesheetsRepository>(relaxed = true)
-    private val timesheetTypeToTimesheetModelConverter = mockk<TimesheetTypeToTimesheetModelConverter>()
+    private val conversionService = mockk<ConversionService>()
 
     private val fetchTimesheetsCronJob = FetchTimesheetsCronJob(
             timesheetsSource = timesheetsSource,
             timesheetsRepository = timesheetsRepository,
-            timesheetTypeToTimesheetModelConverter = timesheetTypeToTimesheetModelConverter
+            conversionService = conversionService
     )
 
     @Test
@@ -32,8 +32,8 @@ class FetchTimesheetsCronJobTest {
         every { timesheetsSource.getTimesheets() } returns listOf(timesheetType1, timesheetType2)
         val timesheetModel1 = mockk<TimesheetModel>()
         val timesheetModel2 = mockk<TimesheetModel>()
-        every { timesheetTypeToTimesheetModelConverter.convert(timesheetType1) } returns timesheetModel1
-        every { timesheetTypeToTimesheetModelConverter.convert(timesheetType2) } returns timesheetModel2
+        every { conversionService.convert(timesheetType1, TimesheetModel::class.java) } returns timesheetModel1
+        every { conversionService.convert(timesheetType2, TimesheetModel::class.java) } returns timesheetModel2
 
         //when
         fetchTimesheetsCronJob.perform()

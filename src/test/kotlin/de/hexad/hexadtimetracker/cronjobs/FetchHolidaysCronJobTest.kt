@@ -1,6 +1,5 @@
 package de.hexad.hexadtimetracker.cronjobs
 
-import de.hexad.hexadtimetracker.converters.HolidayTypeToHolidayModelConverter
 import de.hexad.hexadtimetracker.models.HolidayModel
 import de.hexad.hexadtimetracker.repositories.HolidaysRepository
 import de.hexad.hexadtimetracker.sources.HolidaysSource
@@ -12,18 +11,19 @@ import io.mockk.verify
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.springframework.core.convert.ConversionService
 
 
 class FetchHolidaysCronJobTes {
 
     val holidaysSource = mockk<HolidaysSource>()
     val holidaysRepository = mockk<HolidaysRepository>(relaxed = true)
-    val holidayTypeToHolidayModelConverter = mockk<HolidayTypeToHolidayModelConverter>()
+    val conversionService = mockk<ConversionService>()
 
     val fetchHolidaysCronJob = FetchHolidaysCronJob(
             holidaysSource = holidaysSource,
             holidaysRepository = holidaysRepository,
-            holidayTypeToHolidayModelConverter = holidayTypeToHolidayModelConverter
+            conversionService = conversionService
     )
 
     @Test
@@ -34,15 +34,15 @@ class FetchHolidaysCronJobTes {
         every { holidaysSource.getHolidays() } returns listOf(holidayType1, holidayType2)
         val holidayModel1 = mockk<HolidayModel>()
         val holidayModel2 = mockk<HolidayModel>()
-        every { holidayTypeToHolidayModelConverter.convert(holidayType1) } returns holidayModel1
-        every { holidayTypeToHolidayModelConverter.convert(holidayType2) } returns holidayModel2
+        every { conversionService.convert(holidayType1, HolidayModel::class.java) } returns holidayModel1
+        every { conversionService.convert(holidayType2, HolidayModel::class.java) } returns holidayModel2
 
         //when
         fetchHolidaysCronJob.perform()
 
         //then
         val holidaysCapturingSlot = slot<List<HolidayModel>>()
-        verify (exactly = 1){ holidaysRepository.saveAll(capture(holidaysCapturingSlot)) }
+        verify(exactly = 1) { holidaysRepository.saveAll(capture(holidaysCapturingSlot)) }
         val holidays = holidaysCapturingSlot.captured
         assertEquals(2, holidays.size)
         assertTrue(holidays.containsAll(listOf(holidayModel1, holidayModel2)))
