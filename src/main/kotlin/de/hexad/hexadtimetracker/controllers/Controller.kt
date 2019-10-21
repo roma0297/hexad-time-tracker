@@ -11,7 +11,8 @@ class Controller(private val employeesSource: EmployeesSource,
                  private val employeeLeavesSource: EmployeeLeavesSource,
                  private val holidaysSource: HolidaysSource,
                  private val timesheetsSource: TimesheetsSource,
-                 private val projectsSource: ProjectsSource) {
+                 private val projectsSource: ProjectsSource,
+                 private val leaveBalancesSource: LeaveBalancesSource) {
 
     @GetMapping("/employees")
     fun getEmployees(): List<EmployeeType> {
@@ -36,5 +37,10 @@ class Controller(private val employeesSource: EmployeesSource,
     @GetMapping("/projects")
     fun getProjects(): List<ProjectType> {
         return projectsSource.getProjects()
+    }
+
+    @GetMapping("/leave-balances/{employeeId}")
+    fun getLeaveBalancesForEmployee(@PathVariable employeeId: String): List<EmployeeLeaveBalanceType> {
+        return leaveBalancesSource.getLeaveBalanceForEmployee(employeeId)
     }
 }
