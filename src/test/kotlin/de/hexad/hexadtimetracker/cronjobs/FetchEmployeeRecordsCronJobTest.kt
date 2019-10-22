@@ -2,20 +2,19 @@ package de.hexad.hexadtimetracker.cronjobs
 
 import de.hexad.hexadtimetracker.models.EmployeeModel
 import de.hexad.hexadtimetracker.models.LeaveBalanceReportModel
+import de.hexad.hexadtimetracker.providers.UserInfo
 import de.hexad.hexadtimetracker.repositories.EmployeeRepository
 import de.hexad.hexadtimetracker.sources.EmployeesSource
 import de.hexad.hexadtimetracker.sources.LeaveBalanceReportsSource
 import de.hexad.hexadtimetracker.types.EmployeeType
 import de.hexad.hexadtimetracker.types.LeaveBalanceReportType
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
-import io.mockk.slot
-import io.mockk.verify
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.springframework.core.convert.ConversionService
+import org.springframework.security.core.context.SecurityContextHolder
 
 class FetchEmployeeRecordsCronJobTest {
 
@@ -37,6 +36,11 @@ class FetchEmployeeRecordsCronJobTest {
     @Test
     fun `should retrieve all employee DTOs, convert them to models and store in the DB`() {
         //given
+        val principal = mockk<UserInfo>()
+        mockkStatic(SecurityContextHolder::class)
+        every { SecurityContextHolder.getContext().authentication.principal } returns principal
+        every { principal.token } returns "e07119171812c29b3a0dacdb79a57e3f"
+
         val employeeDto1 = mockk<EmployeeType>()
         val employeeDto2 = mockk<EmployeeType>()
 
@@ -49,7 +53,7 @@ class FetchEmployeeRecordsCronJobTest {
         val leaveBalanceReportType1 = mockk<LeaveBalanceReportType>()
         val leaveBalanceReportModel1 = mockk<LeaveBalanceReportModel>()
         every { conversionService.convert(leaveBalanceReportType1, LeaveBalanceReportModel::class.java) } returns leaveBalanceReportModel1
-        every { leaveBalanceReportsSource.getLeaveBalanceReportsForEmployee("employeeId1") } returns listOf(leaveBalanceReportType1)
+        every { leaveBalanceReportsSource.getLeaveBalanceReportsForEmployee("employeeId1", "e07119171812c29b3a0dacdb79a57e3f") } returns listOf(leaveBalanceReportType1)
 
         val employeeModel2 = mockk<EmployeeModel>(relaxed = true)
         every { employeeModel2.employeeStatus } returns "Active"
@@ -61,7 +65,7 @@ class FetchEmployeeRecordsCronJobTest {
         val leaveBalanceReportType3 = mockk<LeaveBalanceReportType>()
         val leaveBalanceReportModel3 = mockk<LeaveBalanceReportModel>()
         every { conversionService.convert(leaveBalanceReportType3, LeaveBalanceReportModel::class.java) } returns leaveBalanceReportModel3
-        every { leaveBalanceReportsSource.getLeaveBalanceReportsForEmployee("employeeId2") } returns listOf(leaveBalanceReportType2, leaveBalanceReportType3)
+        every { leaveBalanceReportsSource.getLeaveBalanceReportsForEmployee("employeeId2", "e07119171812c29b3a0dacdb79a57e3f") } returns listOf(leaveBalanceReportType2, leaveBalanceReportType3)
 
         //when
         fetchEmployeeRecordsCronJob.perform()
